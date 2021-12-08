@@ -70,7 +70,7 @@ return true;
 								<input class="form-control" placeholder="E-mail" name="email" type="email" required="true">
 							</div>
 							<div class="form-group">
-								<input type="text" class="form-control" id="mobilenumber" name="mobilenumber" placeholder="Mobile Number" maxlength="10" pattern="[0-9]{10}" required="true">
+								<input type="text" class="form-control" id="mobilenumber" name="mobilenumber" placeholder="Mobile Number" maxlength="8" pattern="[0-9]{8}" required="true">
 							</div>
 							<div class="form-group">
 								<input class="form-control" placeholder="Password" name="password" type="password" value="" required="true">

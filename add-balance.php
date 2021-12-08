@@ -5,28 +5,30 @@ include('includes/dbconnection.php');
 if (strlen($_SESSION['detsuid']==0)) {
   header('location:logout.php');
   } else{
-    if(isset($_POST['submit']))
-  {
-    $userid=$_SESSION['detsuid'];
-    $fullname=$_POST['fullname'];
-  $mobno=$_POST['contactnumber'];
 
-     $query=mysqli_query($con, "update tbluser set FullName ='$fullname', MobileNumber='$mobno' where ID='$userid'");
-    if ($query) {
-    $msg="User profile has been updated.";
-  }
-  else
-    {
-      $msg="Something Went Wrong. Please try again.";
-    }
-  }
+if(isset($_POST['submit']))
+  {
+  	$userid=$_SESSION['detsuid'];
+    $datebalance=$_POST['datebalance'];
+     $category=$_POST['category'];
+     $balanceamount=$_POST['balanceamount'];
+    $query=mysqli_query($con, "insert into tblbalance(UserId,BalanceDate,BalanceCategory,BalanceAmount) value('$userid','$datebalance','$category','$balanceamount')");
+if($query){
+echo "<script>alert('Balance has been added');</script>";
+echo "<script>window.location.href='manage-balance.php'</script>";
+} else {
+echo "<script>alert('Something went wrong. Please try again');</script>";
+
+}
+  
+}
   ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Daily Expense Tracker || User Profile</title>
+	<title>Daily Expense Tracker || Add Expense</title>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/font-awesome.min.css" rel="stylesheet">
 	<link href="css/datepicker3.css" rel="stylesheet">
@@ -49,7 +51,7 @@ if (strlen($_SESSION['detsuid']==0)) {
 				<li><a href="#">
 					<em class="fa fa-home"></em>
 				</a></li>
-				<li class="active">Profile</li>
+				<li class="active">Expense</li>
 			</ol>
 		</div><!--/.row-->
 		
@@ -62,45 +64,35 @@ if (strlen($_SESSION['detsuid']==0)) {
 				
 				
 				<div class="panel panel-default">
-					<div class="panel-heading">Profile</div>
+					<div class="panel-heading">Expense</div>
 					<div class="panel-body">
 						<p style="font-size:16px; color:red" align="center"> <?php if($msg){
     echo $msg;
   }  ?> </p>
 						<div class="col-md-12">
-							 <?php
-$userid=$_SESSION['detsuid'];
-$ret=mysqli_query($con,"select * from tbluser where ID='$userid'");
-$cnt=1;
-while ($row=mysqli_fetch_array($ret)) {
-
-?>
+							
 							<form role="form" method="post" action="">
 								<div class="form-group">
-									<label>Full Name</label>
-									<input class="form-control" type="text" value="<?php  echo $row['FullName'];?>" name="fullname" required="true">
+									<label>Date Started</label>
+									<input class="form-control" type="date" value="" name="datebalance" required="true">
 								</div>
 								<div class="form-group">
-									<label>Email</label>
-<input type="email" class="form-control" name="email" value="<?php  echo $row['Email'];?>" required="true" readonly="true">
+									<label>Category</label>
+									<input type="text" class="form-control" name="category" value="" required="true">
 								</div>
 								
 								<div class="form-group">
-									<label>Mobile Number</label>
-									<input class="form-control" type="text" value="<?php  echo $row['MobileNumber'];?>" required="true" name="contactnumber" maxlength="8">
+									<label>Amount</label>
+									<input class="form-control" type="text" value="" required="true" name="balanceamount">
 								</div>
-								<div class="form-group">
-									<label>Registration Date</label>
-									<input class="form-control" name="regdate" type="text" value="<?php  echo $row['RegDate'];?>" readonly="true">
-								</div>
-								
+																
 								<div class="form-group has-success">
-									<button type="submit" class="btn btn-primary" name="submit">Update</button>
+									<button type="submit" class="btn btn-primary" name="submit">Add</button>
 								</div>
 								
 								
 								</div>
-								<?php } ?>
+								
 							</form>
 						</div>
 					</div>

@@ -10,10 +10,10 @@ if (strlen($_SESSION['detsuid']==0)) {
 if(isset($_GET['delid']))
 {
 $rowid=intval($_GET['delid']);
-$query=mysqli_query($con,"delete from tblexpense where ID='$rowid'");
+$query=mysqli_query($con,"delete from tblbalance where ID='$rowid'");
 if($query){
 echo "<script>alert('Record successfully deleted');</script>";
-echo "<script>window.location.href='manage-expense.php'</script>";
+echo "<script>window.location.href='manage-balance.php'</script>";
 } else {
 echo "<script>alert('Something went wrong. Please try again');</script>";
 
@@ -21,14 +21,13 @@ echo "<script>alert('Something went wrong. Please try again');</script>";
 
 }
 
-function getBalanceCat($id,$con){
+function getBalance($id,$con){
 
-	$balanceCategory = mysqli_query($con, "SELECT BalanceCategory From tblbalance WHERE ID = $id "); 
-	$balanceCat = mysqli_fetch_array($balanceCategory);
-	return $balanceCat['BalanceCategory'];
+	$balanceamount = mysqli_query($con, "SELECT SUM(ExpenseCost) AS total From tblexpense WHERE BalanceID = $id "); 
+	$totalsum = mysqli_fetch_array($balanceamount);
+	return $totalsum['total'];
 
 }
-
 
 ?>
   <!DOCTYPE html>
@@ -37,7 +36,7 @@ function getBalanceCat($id,$con){
   <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>Daily Expense Tracker || Manage Expense</title>
+      <title>Daily Expense Tracker || Manage Balance</title>
       <link href="css/bootstrap.min.css" rel="stylesheet">
       <link href="css/font-awesome.min.css" rel="stylesheet">
       <link href="css/datepicker3.css" rel="stylesheet">
@@ -62,7 +61,7 @@ function getBalanceCat($id,$con){
                   <li><a href="#">
                           <em class="fa fa-home"></em>
                       </a></li>
-                  <li class="active">Expense</li>
+                  <li class="active">Balance</li>
               </ol>
           </div>
           <!--/.row-->
@@ -78,7 +77,7 @@ function getBalanceCat($id,$con){
                   <div class="panel panel-default">
                       <div class="panel-heading">Expense</div>
                       <div class="panel-body">
-                          <p style="font-size:16px; color:red" text-align="center"> <?php if($msg){
+                          <p style="font-size:16px; color:red" align="center"> <?php if($msg){
     echo $msg;
   }  ?> </p>
                           <div class="col-md-12">
@@ -88,29 +87,29 @@ function getBalanceCat($id,$con){
                                       <thead>
                                           <tr>
                                               <th>S.NO</th>
-                                              <th>From Balance</th>
-                                              <th>Expense Item</th>
-                                              <th>Expense Cost</th>
-                                              <th>Expense Date</th>
+                                              <th>Balance Category</th>
+                                              <th>Available Balance Amount</th>
+                                              <th>Initial Balance Amount</th>
+                                              <th>Date Added</th>
                                               <th>Action</th>
                                           </tr>
                                       </thead>
                                       <?php
               $userid=$_SESSION['detsuid'];
-$ret=mysqli_query($con,"select * from tblexpense where UserId='$userid'");
+$ret=mysqli_query($con,"select * from tblbalance where UserId='$userid'");
 $cnt=1;
 while ($row=mysqli_fetch_array($ret)) {
-
+	
 ?>
                                       <tbody>
                                           <tr>
                                               <td><?php echo $cnt;?></td>
-                                              <td><?= getBalanceCat($row['BalanceID
-'],$con) ;?></td>
-                                              <td><?php  echo $row['ExpenseItem'];?></td>
-                                              <td><?php  echo $row['ExpenseCost'];?></td>
-                                              <td><?php  echo $row['ExpenseDate'];?></td>
-                                              <td><a href="manage-expense.php?delid=<?php echo $row['ID'];?>">Delete</a>
+                                              <td><?php  echo $row['BalanceCategory'];?></td>
+                                              <td><?= $row['BalanceAmount'] - getBalance($row['ID'],$con) ;?></td>
+                                              <td><?php echo $row['BalanceAmount'];?></td>
+                                              <td><?php  echo $row['BalanceDate'];?></td>
+                                              <td><a href="manage-balance.php?delid=<?php echo $row['ID'];?>">Delete</a>
+
                                           </tr>
                                           <?php 
 $cnt=$cnt+1;
