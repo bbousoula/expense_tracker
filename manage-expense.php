@@ -98,15 +98,16 @@ function getBalanceCat($id,$con){
                                       <?php
               $userid=$_SESSION['detsuid'];
 $ret=mysqli_query($con,"select * from tblexpense where UserId='$userid'");
+$expense_data=mysqli_query($con,"SELECT * FROM tblexpense INNER JOIN tblbalance ON tblexpense.BalanceID = tblbalance.ID where tblexpense.UserId='$userid'");
+
 $cnt=1;
-while ($row=mysqli_fetch_array($ret)) {
+while ($row=mysqli_fetch_array($expense_data)) {
 
 ?>
                                       <tbody>
                                           <tr>
                                               <td><?php echo $cnt;?></td>
-                                              <td><?= getBalanceCat($row['BalanceID
-'],$con) ;?></td>
+                                              <td><?php  echo $row['BalanceCategory'];?></td>
                                               <td><?php  echo $row['ExpenseItem'];?></td>
                                               <td><?php  echo $row['ExpenseCost'];?></td>
                                               <td><?php  echo $row['ExpenseDate'];?></td>
