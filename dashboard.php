@@ -17,6 +17,7 @@ if (strlen($_SESSION['detsuid']==0)) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Daily Expense Tracker - Dashboard</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
+
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <link href="css/datepicker3.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
@@ -188,57 +189,172 @@ echo $sum_yearly_expense;
             <div class="col-xs-6 col-md-3">
                 <div class="panel panel-default">
                     <?php
-//Yearly Expense
-$userid=$_SESSION['detsuid'];
-$query5=mysqli_query($con,"select sum(ExpenseCost)  as totalexpense from tblexpense where UserId='$userid';");
-$result5=mysqli_fetch_array($query5);
-$sum_total_expense=$result5['totalexpense'];
- ?>
+                        //Yearly Expense
+                        $userid=$_SESSION['detsuid'];
+                        $query5=mysqli_query($con,"select sum(ExpenseCost)  as totalexpense from tblexpense where UserId='$userid';");
+                        $result5=mysqli_fetch_array($query5);
+                        $sum_total_expense=$result5['totalexpense'];
+                    ?>
                     <div class="panel-body easypiechart-panel">
                         <h4>Total Expenses</h4>
                         <div class="easypiechart" id="easypiechart-red" data-percent="<?php echo $sum_total_expense;?>">
                             <span class="percent"><?php if($sum_total_expense==""){
-echo "0";
-} else {
-echo $sum_total_expense;
-}
-
-	?></span>
+                                echo "0";
+                                } else {
+                                echo $sum_total_expense;
+                                }?>
+                            </span>
                         </div>
-
-
                     </div>
 
                 </div>
+            </div>
+            <div class="col-xs-6 col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-body easypiechart-panel">
+                        <h4 style="margin-bottom:0;">Expenses</h4>
+                        <div class="card mt-4" style="padding-bottom:5px;">
+                            <div class="card-body">
+                                <div class="chart-container pie-chart">
+                                    <canvas id="doughnut_chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
 
             </div>
-
-
+            <!--/.row-->
         </div>
+        <!--/.main-->
+        <?php include_once('includes/footer.php');?>
+        <script src="js/jquery-1.11.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/chart.min.js"></script>
+        <script src="js/chart-data.js"></script>
+        <script src="js/easypiechart.js"></script>
+        <script src="js/easypiechart-data.js"></script>
+        <script src="js/bootstrap-datepicker.js"></script>
+        <script src="js/custom.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+        <script>
+        window.onload = function() {
+            var chart1 = document.getElementById("line-chart").getContext("2d");
+            window.myLine = new Chart(chart1).Line(lineChartData, {
+                responsive: true,
+                scaleLineColor: "rgba(0,0,0,.2)",
+                scaleGridLineColor: "rgba(0,0,0,.05)",
+                scaleFontColor: "#c5c7cc"
+            });
 
-        <!--/.row-->
-    </div>
-    <!--/.main-->
-    <?php include_once('includes/footer.php');?>
-    <script src="js/jquery-1.11.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/chart.min.js"></script>
-    <script src="js/chart-data.js"></script>
-    <script src="js/easypiechart.js"></script>
-    <script src="js/easypiechart-data.js"></script>
-    <script src="js/bootstrap-datepicker.js"></script>
-    <script src="js/custom.js"></script>
-    <script>
-    window.onload = function() {
-        var chart1 = document.getElementById("line-chart").getContext("2d");
-        window.myLine = new Chart(chart1).Line(lineChartData, {
-            responsive: true,
-            scaleLineColor: "rgba(0,0,0,.2)",
-            scaleGridLineColor: "rgba(0,0,0,.05)",
-            scaleFontColor: "#c5c7cc"
+
+
+        };
+
+        $(document).ready(function() {
+
+            /*    $('#submit_data').click(function() {
+
+                   var expense = $('input[name=programming_expense]:checked').val();
+
+                   $.ajax({
+                       url: "chartdata.php",
+                       method: "POST",
+                       data: {
+                           action: 'insert',
+                           expense: expense
+                       },
+                       beforeSend: function() {
+                           $('#submit_data').attr('disabled', 'disabled');
+                       },
+                       success: function(data) {
+                           $('#submit_data').attr('disabled', false);
+
+                           $('#programming_expense_1').prop('checked', 'checked');
+
+                           $('#programming_expense_2').prop('checked', false);
+
+                           $('#programming_expense_3').prop('checked', false);
+
+                           alert("Your Feedback has been send...");
+
+                           makechart();
+                       }
+                   })
+
+               }); */
+
+            makechart();
+
+            function makechart() {
+                $.ajax({
+                    url: "chartdata.php",
+                    method: "POST",
+                    data: {
+                        action: 'fetch'
+                    },
+                    dataType: "JSON",
+                    success: function(data) {
+                        var expense = [];
+                        var total = [];
+                        var color = [];
+
+                        for (var count = 0; count < data.length; count++) {
+                            expense.push(data[count].expense);
+                            total.push(data[count].total);
+                            color.push(data[count].color);
+                        }
+
+                        var chart_data = {
+                            labels: expense,
+                            datasets: [{
+                                label: 'Vote',
+                                backgroundColor: color,
+                                color: '#fff',
+                                data: total
+                            }]
+                        };
+
+                        var options = {
+                            responsive: true,
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        min: 0
+                                    }
+                                }]
+                            }
+                        };
+
+                        var group_chart1 = $('#pie_chart');
+
+                        var graph1 = new Chart(group_chart1, {
+                            type: "pie",
+                            data: chart_data
+                        });
+
+                        var group_chart2 = $('#doughnut_chart');
+
+                        var graph2 = new Chart(group_chart2, {
+                            type: "doughnut",
+                            data: chart_data
+                        });
+
+                        var group_chart3 = $('#bar_chart');
+
+                        var graph3 = new Chart(group_chart3, {
+                            type: 'bar',
+                            data: chart_data,
+                            options: options
+                        });
+                    }
+                })
+            }
+
         });
-    };
-    </script>
+        </script>
 
 </body>
 
