@@ -88,11 +88,11 @@ echo "<script>alert('Something went wrong. Please try again');</script>";
                                         <option disabled selected>-- Select Balance --</option>
                                         <?php
 
-        $records = mysqli_query($con, "SELECT ID , BalanceCategory  From tblbalance");  // Use select query here 
+        $records = mysqli_query($con, "SELECT BalanceID , BalanceCategory  From tblbalance");  // Use select query here 
 
         while($data = mysqli_fetch_array($records))
         {
-            echo "<option value='". $data['ID'] ."'>" .$data['BalanceCategory'] ."</option>";  // displaying data in option menu
+            echo "<option value='". $data['BalanceID'] ."'>" .$data['BalanceCategory'] ."</option>";  // displaying data in option menu
         }	
     ?>
                                     </select>

@@ -10,7 +10,7 @@ if (strlen($_SESSION['detsuid']==0)) {
 if(isset($_GET['delid']))
 {
 $rowid=intval($_GET['delid']);
-$query=mysqli_query($con,"delete from tblbalance where ID='$rowid'");
+$query=mysqli_query($con,"delete from tblbalance where BalanceID='$rowid'");
 if($query){
 echo "<script>alert('Record successfully deleted');</script>";
 echo "<script>window.location.href='manage-balance.php'</script>";
@@ -105,10 +105,12 @@ while ($row=mysqli_fetch_array($ret)) {
                                           <tr>
                                               <td><?php echo $cnt;?></td>
                                               <td><?php  echo $row['BalanceCategory'];?></td>
-                                              <td><?= $row['BalanceAmount'] - getBalance($row['ID'],$con) ;?></td>
+                                              <td><?= $row['BalanceAmount'] - getBalance($row['BalanceID'],$con) ;?>
+                                              </td>
                                               <td><?php echo $row['BalanceAmount'];?></td>
                                               <td><?php  echo $row['BalanceDate'];?></td>
-                                              <td><a href="manage-balance.php?delid=<?php echo $row['ID'];?>">Delete</a>
+                                              <td><a
+                                                      href="manage-balance.php?delid=<?php echo $row['BalanceID'];?>">Delete</a>
 
                                           </tr>
                                           <?php 

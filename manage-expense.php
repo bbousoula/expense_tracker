@@ -23,7 +23,7 @@ echo "<script>alert('Something went wrong. Please try again');</script>";
 
 function getBalanceCat($id,$con){
 
-	$balanceCategory = mysqli_query($con, "SELECT BalanceCategory From tblbalance WHERE ID = $id "); 
+	$balanceCategory = mysqli_query($con, "SELECT BalanceCategory From tblbalance WHERE BalanceID = $id "); 
 	$balanceCat = mysqli_fetch_array($balanceCategory);
 	return $balanceCat['BalanceCategory'];
 
@@ -98,7 +98,7 @@ function getBalanceCat($id,$con){
                                       <?php
               $userid=$_SESSION['detsuid'];
 $ret=mysqli_query($con,"select * from tblexpense where UserId='$userid'");
-$expense_data=mysqli_query($con,"SELECT * FROM tblexpense INNER JOIN tblbalance ON tblexpense.BalanceID = tblbalance.ID where tblexpense.UserId='$userid'");
+$expense_data=mysqli_query($con,"SELECT * FROM tblexpense INNER JOIN tblbalance ON tblexpense.BalanceID = tblbalance.BalanceID where tblexpense.UserId='$userid'");
 
 $cnt=1;
 while ($row=mysqli_fetch_array($expense_data)) {
