@@ -13,6 +13,7 @@ if(isset($_POST['submit']))
      $item=$_POST['item'];
      $costitem=$_POST['costitem'];
 	 $balancecategory =$_POST['balancecategory'];
+     //Query to insert data into table expense
     $query=mysqli_query($con, "insert into tblexpense(UserId,ExpenseDate,ExpenseItem,ExpenseCost,BalanceID) value('$userid','$dateexpense','$item','$costitem','$balancecategory')");
 
 if($query){
