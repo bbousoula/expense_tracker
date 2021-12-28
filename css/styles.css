@@ -1324,6 +1324,14 @@ h1.page-header {
   color: #ef4040;
 }
 
+#easypiechart-yellow .percent {
+	color: #ffc93c;
+}
+
+#easypiechart-pink .percent {
+	color: #f76b8a;
+}
+
 #calendar,
 .datepicker-inline {
   width: 100%;

@@ -61,7 +61,7 @@ function getBalance($id,$con){
                 <li><a href="#">
                         <em class="fa fa-home"></em>
                     </a></li>
-                <li class="active">Balance</li>
+                <li class="active">Edit Current Balance</li>
             </ol>
         </div>
         <!--/.row-->
@@ -75,7 +75,7 @@ function getBalance($id,$con){
 
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">Expense</div>
+                    <div class="panel-heading">Current Balance</div>
                     <div class="panel-body">
                         <p style="font-size:16px; color:red" align="center"> <?php if($msg){
     echo $msg;

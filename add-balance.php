@@ -55,7 +55,7 @@ echo "<script>alert('Something went wrong. Please try again');</script>";
                 <li><a href="#">
                         <em class="fa fa-home"></em>
                     </a></li>
-                <li class="active">Expense</li>
+                <li class="active">Add Balance</li>
             </ol>
         </div>
         <!--/.row-->
@@ -69,7 +69,7 @@ echo "<script>alert('Something went wrong. Please try again');</script>";
 
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">Expense</div>
+                    <div class="panel-heading">Add Balance</div>
                     <div class="panel-body">
                         <p style="font-size:16px; color:red" align="center"> <?php if($msg){
     echo $msg;
